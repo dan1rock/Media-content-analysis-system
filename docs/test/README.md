@@ -24,4 +24,4 @@
 
 ## Запит на відображення конкретної сутності (GET)
 
-![8](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/8.png)
+![8](https://github.com/dan1rock/Media-content-analysis-system/blob/8fb663fb0386e3424115910459583dd3e214d49e/docs/test/8.png)
