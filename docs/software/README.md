@@ -1,6 +1,7 @@
 # Реалізація інформаційного та програмного забезпечення
 
-В рамках проекту розробляється: 
+В рамках проекту розробляється:
+
 ## SQL-скрипт для створення на початкового наповнення бази даних
 
 ```sql
@@ -84,7 +85,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`source` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`source` (
-	`id` INT NOT NULL AUTO_INCREMENT,
+    `id` INT NOT NULL AUTO_INCREMENT,
     `url` VARCHAR(45) NULL,
     `api_key` VARCHAR(45) NULL,
     PRIMARY KEY (`id`))
