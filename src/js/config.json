@@ -1,0 +1,12 @@
+{
+    "configServer": {
+        "PORT": 8080
+    },
+    "dbConfig": {
+        "dbName": "mydb",
+        "userName": "root",
+        "dbPassword": "Passw0rd",
+        "dialect": "mysql",
+        "host": "localhost"
+    }
+}

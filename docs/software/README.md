@@ -193,38 +193,246 @@ CREATE TABLE IF NOT EXISTS `mydb`.`metadata` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
---------------------------------------------------------
--- Data for table `mydb`.`user`
---------------------------------------------------------
-
-START TRANSACTION;
-
-USE `mydb`;
-
-INSERT INTO `mydb`.`user` (`id`, `name`, `email`, `password`) VALUES (DEFAULT, 'gddgdg', 'g@gmail.com', 'passw123');
-INSERT INTO `mydb`.`user` (`id`, `name`, `email`, `password`) VALUES (DEFAULT, 'daniil', 'd@gmail.com', 'passw321');
-
-COMMIT;
-
--------------------------------------------------------
--- Data for table `mydb`.`source`
--------------------------------------------------------
-
-START TRANSACTION;
-
-USE `mydb`;
-
-INSERT INTO `mydb`.`source` (`id`, `url`, `api_key`) VALUES (DEFAULT, 'https://kpi.ua', 'AZdsdadWEqweWQEQWEQds');
-INSERT INTO `mydb`.`source` (`id`, `url`, `api_key`) VALUES (DEFAULT, 'https://mono.ua', 'AZdsdEwerwweWQEQWEQds');
-
-COMMIT;
 ```
 
 ## RESTfull сервіс для управління даними
 
+### Кореневий файл сервера
+
+```js
+'use strict';
+
+const express = require('express');
+const router = require('./routes/router.js');
+const {configServer} = require('./config.json');
+
+const app = express();
+const port = process.env.PORT || configServer.PORT;
+
+app.use(express.json());
+app.use(router);
+
+app.listen(port, (err) => {
+    if(err) throw new Error(`Error listening -> ${err}`);
+    console.log(`Server listening at http://localhost:${port}`);
+})
+
+```
+
+### Файл підключення до БД
+
+```js
+'use strict';
+
+const { dbConfig } = require('../config.json');
+const { Sequelize } = require('sequelize');
+
+const sequelize = new Sequelize(dbConfig.dbName, dbConfig.userName, dbConfig.dbPassword, {
+  host: dbConfig.host,
+  dialect: dbConfig.dialect
+});
+
+const user = require('../model/user.js')(sequelize);
+
+module.exports = { user }
+
+```
+
+### config.json
+
+```json
+{
+    "configServer": {
+        "PORT": 8080
+    },
+    "dbConfig": {
+        "dbName": "mydb",
+        "userName": "root",
+        "dbPassword": "Passw0rd",
+        "dialect": "mysql",
+        "host": "localhost"
+    }
+}
+
+```
+
+### Файл роутера
+
+```js
+'use strict';
+
+const { createUser, updateUser, removeUser, getUserById } = require("../controllers/user.js")
+const { Router } = require("express");
+const router = Router();
+
+router.post('/user', createUser);
+router.put('/user/:id', updateUser);
+router.delete('/user/:id', removeUser);
+router.get('/user/:id', getUserById);
+
+module.exports = router;
+
+```
+
+### Моделі Sequelize
+
+```js
+'use strict';
+
+const Sequelize = require('sequelize');
+
+function user(sequelize) {
+    return sequelize.define("user", {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            allowNull: false,
+            
+        },
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        email: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        login: {
+            type: Sequelize.STRING,
+            allowNull: false,
+        },
+        password: {
+            type: Sequelize.STRING,
+            allowNull: false,   
+        },
+    }, 
+    {
+        timestamps: false,
+        tableName: "user"
+    })
+}
+
+module.exports = user;
+
+```
+
+### Файли контролерів, які оброблюють запити
+
+```js
+'use strict';
+
+const { user } = require('../connection/connection.js');
+
+async function createUsr(data) {
+    await user.create(data)
+    .then((res) => console.log('Position created succesfully!'))
+    .catch((err) => console.error(`Error create position -> ${err}`));
+    return;
+}
+
+async function getUsr(id) {
+    const res = await user.findAll({
+        where: {
+            "id": id,
+        }
+    });
+    if(res.length === 0) { 
+        throw new Error(`user where id = ${id} doesn't exists`)
+    }
+
+    return res; 
+}
+
+async function updateUsr(id, data) {
+    const res = await user.findAll({
+        where: {
+            "id": id,
+        }
+    })
+    .catch((err) => console.error(`Error check exists user -> ${err}`));
+
+    if(res.length !== 0) {
+        await user.update(data, {
+            where: {
+                "id": id,
+            }
+        })
+        .then((res) => console.log('User updated succesfully!'))
+        .catch((err) => console.error(`Error update user -> ${err}`));
+        return;
+    } else {
+        throw new Error(`User by id: ${id} doesn't exists!`);
+    }
+}
+
+async function removeUsr(id) {
+    const res = await user.findAll({
+        where: {
+            "id": id,
+        }
+    })
+    .catch((err) => console.error(`Error check exists position -> ${err}`));
+
+    if(res.length !== 0) {
+        await user.destroy({
+            where: {
+                "id": id,
+            }
+        })
+        .then(res => console.log(`User by id: ${id} successfully removed`))
+        .catch(err => console.error(`Error -> can't delete user! ID: "id${id}" - ${err}`));
+        return;
+    } else {
+        throw new Error(`User by id: ${id} can't be removed, because it doesn't exists!`)
+    }
+}
+
+module.exports = { createUsr, getUsr, updateUsr, removeUsr }
+
+```
+
+```js
+'use strict';
+
+const { createUsr, getUsr, updateUsr, removeUsr } = require('./userControl.js');
+
+async function createUser(req, res) {
+    try {
+        const user = await createUsr(req.body)
+        return res.status(200).json(`User successfully created`);
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+async function getUserById(req, res) {
+    try {
+        const user = await getUsr(req.params.id);
+        return res.status(200).json(user);
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+async function removeUser(req, res) {
+    try {
+        await removeUsr(req.params.id);
+        return res.status(200).json('User successfully removed');
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+async function updateUser(req, res) {
+    try {
+        const user = await updateUsr(req.params.id, req.body);
+        return res.status(200).json('User successfully updated');
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+module.exports = { createUser, getUserById, removeUser, updateUser };
+
+```
