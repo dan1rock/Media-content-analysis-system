@@ -21,3 +21,7 @@
 ![6](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/6.png)
 
 ![7](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/7.png)
+
+## Запит на відображення конкретної сутності (GET)
+
+![8](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/8.png)
