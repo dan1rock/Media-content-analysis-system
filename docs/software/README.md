@@ -262,7 +262,7 @@ module.exports = { user }
 ```js
 'use strict';
 
-const { createUser, updateUser, removeUser, getUserById } = require("../controllers/user.js")
+const { createUser, updateUser, removeUser, getUserById, getAllUsers } = require("../controllers/user.js")
 const { Router } = require("express");
 const router = Router();
 
@@ -270,6 +270,7 @@ router.post('/user', createUser);
 router.put('/user/:id', updateUser);
 router.delete('/user/:id', removeUser);
 router.get('/user/:id', getUserById);
+router.get('/user', getAllUsers);
 
 module.exports = router;
 
@@ -342,7 +343,16 @@ async function getUsr(id) {
         throw new Error(`user where id = ${id} doesn't exists`)
     }
 
-    return res; 
+    return res;
+}
+
+async function getAllUsrs() {
+    const res = await user.findAll();
+    if(res.length === 0) { 
+        throw new Error(`user table is empty`)
+    }
+
+    return res;
 }
 
 async function updateUsr(id, data) {
@@ -389,14 +399,14 @@ async function removeUsr(id) {
     }
 }
 
-module.exports = { createUsr, getUsr, updateUsr, removeUsr }
+module.exports = { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr }
 
 ```
 
 ```js
 'use strict';
 
-const { createUsr, getUsr, updateUsr, removeUsr } = require('./userControl.js');
+const { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr } = require('./userControl.js');
 
 async function createUser(req, res) {
     try {
@@ -411,6 +421,15 @@ async function getUserById(req, res) {
     try {
         const user = await getUsr(req.params.id);
         return res.status(200).json(user);
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+async function getAllUsers(req, res) {
+    try {
+        const users = await getAllUsrs();
+        return res.status(200).json(users);
     } catch(err) {
         return res.status(500).json(`Server error -> ${err}`);
     }
@@ -434,6 +453,6 @@ async function updateUser(req, res) {
     }
 }
 
-module.exports = { createUser, getUserById, removeUser, updateUser };
+module.exports = { createUser, getUserById, getAllUsers, removeUser, updateUser };
 
 ```

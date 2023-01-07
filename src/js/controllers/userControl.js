@@ -19,7 +19,16 @@ async function getUsr(id) {
         throw new Error(`user where id = ${id} doesn't exists`)
     }
 
-    return res; 
+    return res;
+}
+
+async function getAllUsrs() {
+    const res = await user.findAll();
+    if(res.length === 0) { 
+        throw new Error(`user table is empty`)
+    }
+
+    return res;
 }
 
 async function updateUsr(id, data) {
@@ -66,4 +75,4 @@ async function removeUsr(id) {
     }
 }
 
-module.exports = { createUsr, getUsr, updateUsr, removeUsr }
+module.exports = { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr }

@@ -1,6 +1,6 @@
 'use strict';
 
-const { createUsr, getUsr, updateUsr, removeUsr } = require('./userControl.js');
+const { createUsr, getUsr, getAllUsrs, updateUsr, removeUsr } = require('./userControl.js');
 
 async function createUser(req, res) {
     try {
@@ -15,6 +15,15 @@ async function getUserById(req, res) {
     try {
         const user = await getUsr(req.params.id);
         return res.status(200).json(user);
+    } catch(err) {
+        return res.status(500).json(`Server error -> ${err}`);
+    }
+}
+
+async function getAllUsers(req, res) {
+    try {
+        const users = await getAllUsrs();
+        return res.status(200).json(users);
     } catch(err) {
         return res.status(500).json(`Server error -> ${err}`);
     }
@@ -38,4 +47,4 @@ async function updateUser(req, res) {
     }
 }
 
-module.exports = { createUser, getUserById, removeUser, updateUser };
+module.exports = { createUser, getUserById, getAllUsers, removeUser, updateUser };
