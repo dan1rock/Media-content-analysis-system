@@ -2,26 +2,26 @@
 
 ## Запит на відображення всіх сутностей (GET)
 
-![1](https://github.com/dan1rock/Media-content-analysis-system/blob/651b891b5357224174fcf10069e49f6f39355a7e/docs/test/1.png)
+![1](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/1.png)
 
 ## Запит на додання сутності (POST)
 
-![2](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/2.png)
+![2](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/2.png)
 
-![3](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/3.png)
+![3](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/3.png)
 
 ## Запит на оновлення сутності (PUT)
 
-![4](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/4.png)
+![4](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/4.png)
 
-![5](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/5.png)
+![5](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/5.png)
 
 ## Запит на видалення сутності (DELETE)
 
-![6](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/6.png)
+![6](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/6.png)
 
-![7](https://github.com/dan1rock/Media-content-analysis-system/blob/f7a2875f8c580dec46a3cab3b93cf73cf1978f7d/docs/test/7.png)
+![7](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/7.png)
 
 ## Запит на відображення конкретної сутності (GET)
 
-![8](https://github.com/dan1rock/Media-content-analysis-system/blob/8fb663fb0386e3424115910459583dd3e214d49e/docs/test/8.png)
+![8](https://raw.githubusercontent.com/dan1rock/Media-content-analysis-system/master/docs/test/8.png)
